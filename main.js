@@ -1,6 +1,6 @@
 // Au chargement de la page
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
   const quotes = [
     "Ce n'est pas le pingouin le plus glissant de la banquise.",
     "Ce n'est pas le couteau le plus aiguisé du tiroir.",
@@ -104,24 +104,39 @@ document.addEventListener("DOMContentLoaded", function () {
     "Ce n'est pas le trèfle à quatre feuilles de la chance.",
   ];
 
-  function getRandomQuote() {
-    const randomIndex = Math.floor(Math.random() * quotes.length);
-    return quotes[randomIndex];
-  }
+  const getRandomQuote = () =>
+    quotes[Math.floor(Math.random() * quotes.length)];
 
-  function displayQuote() {
+  const displayQuote = () => {
     const quoteElement = document.getElementById("quote");
     if (quoteElement) {
       quoteElement.textContent = getRandomQuote();
     }
-  }
+  };
+
+  const switchColorTheme = () => {
+    document.body.classList.toggle("dark");
+    localStorage.setItem("dark-mode", document.body.classList.contains("dark"));
+  };
+
+  const checkColorTheme = () => {
+    if (localStorage.getItem("dark-mode") === "true") {
+      document.body.classList.add("dark");
+    }
+  };
 
   // On load
   displayQuote();
+  checkColorTheme();
 
   // New quote button
   const newQuoteButton = document.getElementById("new-quote-button");
   if (newQuoteButton) {
     newQuoteButton.addEventListener("click", displayQuote);
+  }
+
+  const switchThemeButton = document.getElementById("switch-theme-button");
+  if (switchThemeButton) {
+    switchThemeButton.addEventListener("click", switchColorTheme);
   }
 });
