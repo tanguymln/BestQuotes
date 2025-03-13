@@ -13,27 +13,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout du code
       - name: Checkout code
         uses: actions/checkout@v2
 
-       # Installer Ruby et Bundler (pour gérer les dépendances)
+      # Installer Ruby et Bundler (pour gérer les dépendances)
       - name: Install Ruby and Bundler
         run: |
           sudo apt-get update
           sudo apt-get install -y ruby-full build-essential
           gem install bundler
 
-      # Installer le générateur de changelog avec Bundler
-      - name: Install changelog generator with Bundler
+      # Installer le générateur de changelog avec --user-install
+      - name: Install changelog generator
         run: |
-          echo "source 'https://rubygems.org'" > Gemfile
-          echo "gem 'github_changelog_generator'" >> Gemfile
-          bundle install
+          # Installer github_changelog_generator dans un répertoire spécifique à l'utilisateur
+          gem install github_changelog_generator --user-install
+
+          # Ajouter le répertoire des gems à la variable PATH
+          echo "export PATH=\$PATH:\$HOME/.gem/ruby/2.7.0/bin" >> $GITHUB_ENV
+
+      # Vérifier l'installation du gem
+      - name: Verify gem installation
+        run: |
+          gem list | grep github_changelog_generator
 
       # Générer le changelog
       - name: Generate changelog
         run: |
-          bundle exec github_changelog_generator --future-release ${{ github.sha }}
+          github_changelog_generator --future-release ${{ github.sha }}
 
       # Ajouter le changelog généré et le commit
       - name: Commit changelog
@@ -44,13 +52,19 @@ jobs:
           git commit -m "Update changelog for release"
           git push
 
-      # Créer une release sur GitHub
+      # Build project (par exemple avec Node.js)
+      - name: Build project
+        run: |
+          npm install
+          npm run build  # Les artefacts seront générés dans 'dist/'
+
+      # Créer la release sur GitHub
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             *.html
             *.js
-            *css
+            *.css
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
