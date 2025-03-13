@@ -16,6 +16,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    # Etape 1: Créer un tag basé sur la version du commit (tu peux personnaliser ce tag selon tes besoins)
+    - name: Create Tag
+      run: |
+        # Créer un tag avec un nom comme v1.0.0 ou basé sur l'ID du commit
+        TAG_NAME="v${GITHUB_SHA::7}"  # Tag basé sur le commit SHA, tu peux personnaliser ce format
+        git tag $TAG_NAME
+        git push origin $TAG_NAME
+
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
