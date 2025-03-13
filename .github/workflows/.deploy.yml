@@ -37,7 +37,7 @@ jobs:
         run: npx eslint .
 
       - name: Run Prettier
-        run: npx prettier --check .
+        run: npx prettier --check --write .
 
   deploy:
     needs: run-linters
