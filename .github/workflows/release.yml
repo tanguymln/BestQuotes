@@ -13,46 +13,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Etape 1: Checkout du code
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # Etape 2: Installer Ruby et Bundler
-    - name: Install Ruby and Bundler
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y ruby-full build-essential
-        gem install bundler
-
-    # Etape 3: Créer un Gemfile et installer les dépendances via Bundler
-    - name: Install dependencies
-      run: |
-        echo "source 'https://rubygems.org'" > Gemfile
-        echo "gem 'github_changelog_generator'" >> Gemfile
-        bundle install
-
-    # Etape 4: Générer le changelog avec github_changelog_generator
-    - name: Generate changelog
-      run: |
-        # Utiliser bundle exec pour exécuter la commande dans l'environnement Bundler
-        bundle exec github_changelog_generator --future-release ${{ github.sha }}
-
-    # Etape 5: Ajouter le changelog généré et commit
-    - name: Commit changelog
-      run: |
-        git add CHANGELOG.md
-        git config --global user.name "GitHub Actions"
-        git config --global user.email "actions@github.com"
-        git commit -m "Update changelog for release"
-        git push
-
-    # Etape 6: Build project (si tu utilises un build pour générer des artefacts comme des fichiers .html, .js, .css)
-    - name: Build project
-      run: |
-        npm install
-        npm run build  # Cela suppose que tu génères des fichiers dans 'dist/'
-
-    # Etape 7: Créer la release sur GitHub avec les artefacts générés
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
