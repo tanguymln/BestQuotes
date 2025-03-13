@@ -23,6 +23,7 @@ jobs:
 
       - name: Generate changelog
         run: |
+          export PATH=$PATH:$HOME/.gem/ruby/2.7.0/bin 
           github_changelog_generator --future-release ${{ github.sha }}
 
       # Ajouter le changelog généré et le commit
