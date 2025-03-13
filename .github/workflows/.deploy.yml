@@ -30,6 +30,9 @@ jobs:
         with:
           node-version: 18
 
+      - name: Install ESLint
+        run: npx --yes eslint@latest --init || true
+
       - name: Run linters
         uses: wearerequired/lint-action@v2
         with:
