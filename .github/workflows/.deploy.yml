@@ -30,8 +30,11 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install Node.js dependencies
-        run: npm ci
+      - name: Run ESLint
+        run: npx eslint . || true
+
+      - name: Run Prettier
+        run: npx prettier --check . || true
 
       - name: Run linters
         uses: wearerequired/lint-action@v2
