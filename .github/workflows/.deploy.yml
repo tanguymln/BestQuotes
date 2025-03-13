@@ -30,12 +30,6 @@ jobs:
         with:
           node-version: 18
 
-      - name: Run ESLint
-        run: npx eslint . || true
-
-      - name: Run Prettier
-        run: npx prettier --check . || true
-
       - name: Run linters
         uses: wearerequired/lint-action@v2
         with:
@@ -50,13 +44,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
           enablement: true
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
