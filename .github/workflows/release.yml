@@ -19,7 +19,7 @@ jobs:
       # Créer un changelog à partir des commits
       - name: Install changelog generator
         run: |
-          gem install github_changelog_generator
+          gem install github_changelog_generator --user-install
 
       - name: Generate changelog
         run: |
