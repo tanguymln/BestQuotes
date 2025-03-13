@@ -1,0 +1,26 @@
+{
+  "name": "bestquotes",
+  "version": "1.0.0",
+  "description": "BestQuotes est une application web simple qui affiche des citations humoristiques aléatoires. Chaque citation est une métaphore amusante pour décrire quelque chose de manière humoristique.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tanguymln/BestQuotes.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tanguymln/BestQuotes/issues"
+  },
+  "homepage": "https://github.com/tanguymln/BestQuotes#readme",
+  "devDependencies": {
+    "eslint": "^9.22.0",
+    "globals": "^16.0.0"
+  },
+  "dependencies": {
+    "prettier": "^3.5.3"
+  }
+}
