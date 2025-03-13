@@ -16,15 +16,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Créer un changelog à partir des commits
-      - name: Install changelog generator
+       # Installer Ruby et Bundler (pour gérer les dépendances)
+      - name: Install Ruby and Bundler
         run: |
-          gem install github_changelog_generator --user-install
+          sudo apt-get update
+          sudo apt-get install -y ruby-full build-essential
+          gem install bundler
 
+      # Installer le générateur de changelog avec Bundler
+      - name: Install changelog generator with Bundler
+        run: |
+          echo "source 'https://rubygems.org'" > Gemfile
+          echo "gem 'github_changelog_generator'" >> Gemfile
+          bundle install
+
+      # Générer le changelog
       - name: Generate changelog
         run: |
-          export PATH=$PATH:$HOME/.gem/ruby/2.7.0/bin 
-          github_changelog_generator --future-release ${{ github.sha }}
+          bundle exec github_changelog_generator --future-release ${{ github.sha }}
 
       # Ajouter le changelog généré et le commit
       - name: Commit changelog
