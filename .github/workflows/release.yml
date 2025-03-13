@@ -1,0 +1,46 @@
+name: Create Release and Update Changelog
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Créer un changelog à partir des commits
+      - name: Install changelog generator
+        run: |
+          gem install github_changelog_generator
+
+      - name: Generate changelog
+        run: |
+          github_changelog_generator --future-release ${{ github.sha }}
+
+      # Ajouter le changelog généré et le commit
+      - name: Commit changelog
+        run: |
+          git add CHANGELOG.md
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git commit -m "Update changelog for release"
+          git push
+
+      # Créer une release sur GitHub
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            *.html
+            *.js
+            *css
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
