@@ -3,10 +3,7 @@ name: Create Release and Generate Changelog
 on:
   push:
     branches:
-      - main # Exécuter sur chaque push vers la branche 'main'
-  pull_request:
-    branches:
-      - main # Exécuter également sur les pull requests vers 'main'
+      - main
 
 permissions:
   contents: write
@@ -18,18 +15,28 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
-      # Etape 1: Créer un tag basé sur la version du commit (tu peux personnaliser ce tag selon tes besoins)
-      - name: Create Tag
+      - name: Configure Git
         run: |
-          # Créer un tag avec un nom comme v1.0.0 ou basé sur l'ID du commit
-          TAG_NAME="v${GITHUB_SHA::7}"  # Tag basé sur le commit SHA, tu peux personnaliser ce format
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Determine Tag Version
+        run: |
+          TAG_NAME="v$(date +'%Y%m%d%H%M%S')" # Tag basé sur la date et l'heure
+          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
+
+      - name: Create and Push Tag
+        run: |
           git tag $TAG_NAME
           git push origin $TAG_NAME
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: ${{ env.TAG_NAME }}
           files: |
             *.html
             *.js
