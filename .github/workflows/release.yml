@@ -2,14 +2,9 @@ name: Create Release and Generate Changelog
 
 on:
   push:
-<<<<<<< HEAD
-    branches:
-      - main
-=======
     branches: ["main"]
   pull_request:
     branches: ["main"]
->>>>>>> b2ca4d7 (fix(ci): fix release ci)
 
 permissions:
   contents: write
