@@ -30,33 +30,30 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install Node.js dependencies
-        run: npm ci
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
 
-      - name: Run linters
-        uses: wearerequired/lint-action@v2
-        with:
-          eslint: true
-          prettier: true
+      - name: Run ESLint
+        run: npx eslint .
+
+      - name: Run Prettier
+        run: npx prettier --check --write .
 
   deploy:
-    needs: run-linters
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: "."
 

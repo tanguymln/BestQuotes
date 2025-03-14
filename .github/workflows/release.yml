@@ -1,0 +1,45 @@
+name: Create Release and Generate Changelog
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Determine Tag Version
+        run: |
+          TAG_NAME="v$(date +'%Y%m%d%H%M%S')" # Tag basé sur la date et l'heure
+          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
+
+      - name: Create and Push Tag
+        run: |
+          git tag $TAG_NAME
+          git push origin $TAG_NAME
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          files: |
+            *.html
+            *.js
+            *.css
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
